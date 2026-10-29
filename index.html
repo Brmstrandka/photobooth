@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Capture Your Moment – photobooth online</title>
+  <meta name="description" content="Photobooth di browser: pilih layout, berpose 5 foto otomatis, edit dengan stiker, lalu unduh atau simpan ke Google Drive. Tanpa daftar, tanpa aplikasi.">
+  <meta name="theme-color" content="#14142b">
+  <meta property="og:title" content="Capture Your Moment – photobooth online">
+  <meta property="og:description" content="Lima pose, satu strip, langsung jadi. Photobooth gratis di browser.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%B8%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Figtree:wght@400;600&family=Creepster&family=Butcherman&family=Metal+Mania&family=Special+Elite&family=Pacifico&family=Caveat+Brush&family=Permanent+Marker&family=Shrikhand&family=Bangers&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <noscript><p style="padding:24px;text-align:center">Photobooth membutuhkan JavaScript. Aktifkan JavaScript di browser kamu.</p></noscript>
+  <header class="nav">
+    <a class="logo" href="#home">kotak<b>foto</b></a>
+    <nav>
+      <a href="#home">Beranda</a>
+      <a href="#cara">Cara kerja</a>
+      
+      <a href="#booth" class="btn btn-sm">Mulai</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-text">
+        <h1>Lima pose,<br>satu strip,<br>langsung jadi.</h1>
+        <p>Photobooth di browser. Tanpa daftar, tanpa unduh aplikasi. Simpan hasilnya ke perangkat atau Google Drive.</p>
+        <div class="row">
+          <a href="#booth" class="btn">Buka photobooth</a>
+          
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="mock m1"><i></i><i></i><i></i><i></i></div>
+        <div class="mock m2"><i></i><i></i><i></i></div>
+        <div class="mock m3"><i></i><i></i><i></i><i></i></div>
+      </div>
+    </section>
+
+    <section id="cara" class="section">
+      <h2>Empat langkah</h2>
+      <ol class="steps">
+        <li><h3>Pilih layout</h3><p>Pilih bentuk strip. Jumlah foto otomatis mengikuti layout yang kamu pilih.</p></li>
+        <li><h3>Berpose</h3><p>Kamera layar penuh memotret 5 foto otomatis, tiap foto dihitung mundur 5 detik.</p></li>
+        <li><h3>Pilih yang terbaik</h3><p>Tandai foto favoritmu dari 5 hasil jepretan.</p></li>
+        <li><h3>Edit &amp; simpan</h3><p>Atur posisi foto, filter, stiker, atau ganti layout, lalu unduh atau simpan ke Drive.</p></li>
+      </ol>
+    </section>
+
+    <section id="booth" class="section">
+      <h2>Photobooth</h2>
+
+      <div id="step1" class="step">
+        <h2 class="center-text">Pilih layout kamu</h2>
+        <p class="center-text sub">Pilih dari koleksi layout photobooth kami. Jumlah foto di stripmu mengikuti layout yang dipilih.</p>
+        <div class="filters">
+          <div class="filter-row"><span class="filter-label" id="lblTheme">Tema</span><div id="themeChips" class="chips" role="group" aria-labelledby="lblTheme"></div></div>
+          <div class="filter-row"><span class="filter-label" id="lblKind">Jenis</span><div id="kindChips" class="chips" role="group" aria-labelledby="lblKind"></div></div>
+        </div>
+        <div class="lay-wrap">
+          <button type="button" id="layPrev" class="lay-arrow" aria-label="Geser ke kiri">&#8249;</button>
+          <div id="layTrack" class="lay-track"></div>
+          <button type="button" id="layNext" class="lay-arrow" aria-label="Geser ke kanan">&#8250;</button>
+        </div>
+        <p id="tplEmpty" class="muted center-text" hidden>Belum ada layout untuk pilihan ini.</p>
+      </div>
+
+      <div id="step2" class="step" hidden>
+        <h3 class="step-title">Berpose!</h3>
+        <p id="layoutInfo" class="muted"></p>
+        <div class="shoot">
+          <div>
+            <div class="viewfinder">
+              <video id="video" autoplay playsinline muted></video>
+              <div id="countdown" class="countdown" hidden></div>
+              <div id="flash" class="flash"></div>
+              <div id="hud" class="hud"><span id="hudCount" class="hud-count"></span><div id="hudThumbs" class="hud-thumbs"></div></div>
+              <p id="camMsg" class="cam-msg">Kamera belum aktif</p>
+            </div>
+            <div class="row center">
+              <button id="btnCam" class="btn ghost">Aktifkan kamera</button>
+              <button id="btnShoot" class="btn" disabled>Mulai foto</button>
+              <button id="btnBackLayout" class="btn ghost">Ganti layout</button>
+            </div>
+            <label class="check center-text"><input type="checkbox" id="chkAuto" checked> Kirim hasil akhir ke Google Drive saat mengunduh</label>
+            <p id="progress" class="muted center-text"></p>
+          </div>
+          <div id="shotGrid" class="grid9"></div>
+        </div>
+      </div>
+
+      <div id="step3" class="step" hidden>
+        <h3 class="step-title">Pilih foto terbaikmu</h3>
+        <p id="pickInfo" class="muted"></p>
+        <div id="pickGrid" class="grid9 pick"></div>
+        <div class="row">
+          <button id="btnRetake" class="btn ghost">Foto ulang</button>
+          <button id="btnPickNext" class="btn" disabled>Lanjut pilih template</button>
+        </div>
+      </div>
+
+      <div id="step4" class="step" hidden>
+        <div class="final">
+          <canvas id="strip"></canvas>
+          <div class="final-side">
+            <div class="tabs" id="tabs">
+              <button type="button" data-tab="gaya">Gaya</button>
+              <button type="button" data-tab="stiker">Stiker</button>
+              <button type="button" data-tab="coret">Coret</button>
+              <button type="button" data-tab="layout">Layout</button>
+            </div>
+
+            <div class="pane" data-pane="gaya">
+              <label class="field">Filter foto
+                <select id="selFilter">
+                  <option value="none">Normal</option>
+                  <option value="grayscale(1) contrast(1.1)">Hitam putih</option>
+                  <option value="sepia(.7) saturate(1.2)">Sepia</option>
+                  <option value="saturate(1.5) contrast(1.05) brightness(1.05)">Cerah</option>
+                </select>
+              </label>
+              <div id="customOnly" class="stack">
+                <div class="field">Warna latar
+                  <div id="bgSwatches" class="swatches"></div>
+                  <label class="check">Warna sendiri <input type="color" id="bgColor" value="#ffe36e"></label>
+                </div>
+              </div>
+              <div class="field">Bentuk foto <div id="shapeChips" class="chips tight"></div></div>
+              <p id="fixedNote" class="muted" hidden>Warna latar mengikuti template ini. Pilih layout bertema "Polos" untuk mengubahnya.</p>
+              <label class="field">Zoom foto terpilih
+                <input type="range" id="zoom" min="1" max="4" step="0.05" value="1">
+              </label>
+              <p class="muted">Geser foto di dalam bingkai untuk mengatur posisinya. Scroll mouse juga bisa untuk zoom.</p>
+            </div>
+
+            <div class="pane" data-pane="stiker" hidden>
+              <div id="stickerTray" class="tray"></div>
+              <div class="field">Font teks <div id="fontChips" class="chips tight fonts"></div></div>
+              <div class="row"><input type="text" id="txtItem" maxlength="20" placeholder="Tulis teks…"><button id="btnAddText" class="btn ghost btn-sm" type="button">Tambah</button></div>
+              <button id="btnAddDate" class="btn ghost btn-sm" type="button">Tambah tanggal</button>
+              <label class="field">Ukuran <input type="range" id="itemSize" min="30" max="400" value="120"></label>
+              <label class="check">Warna teks <input type="color" id="itemColor" value="#14142b"></label>
+              <button id="btnDelItem" class="btn ghost btn-sm" type="button" disabled>Hapus yang dipilih</button>
+              <p class="muted">Ketuk stiker untuk menambah, lalu geser di strip untuk memindahkan.</p>
+            </div>
+
+            <div class="pane" data-pane="coret" hidden>
+              <label class="check">Warna pena <input type="color" id="penColor" value="#ff5a36"></label>
+              <label class="field">Tebal pena <input type="range" id="penSize" min="2" max="40" value="8"></label>
+              <div class="row"><button id="btnUndo" class="btn ghost btn-sm" type="button">Batalkan</button><button id="btnClear" class="btn ghost btn-sm" type="button">Hapus coretan</button></div>
+              <p class="muted">Gambar langsung di atas strip.</p>
+            </div>
+
+            <div class="pane" data-pane="layout" hidden>
+              <p class="muted">Ganti layout tanpa foto ulang. Hanya layout dengan jumlah foto yang sama yang ditampilkan.</p>
+              <div id="layoutMini" class="lay-mini"></div>
+            </div>
+
+            <hr>
+            <label class="muted" for="guestName">Nama (untuk nama folder di Drive)</label>
+            <div class="row"><input type="text" id="guestName" maxlength="40" placeholder="mis. Budi" autocomplete="off"></div>
+            <button id="btnDownload" class="btn">Unduh PNG</button>
+            <button id="btnDrive" class="btn ghost">Simpan ke Drive</button>
+            <button id="btnQR" class="btn ghost">Buat QR Drive</button>
+            <button id="btnConnect" class="btn ghost">Hubungkan Drive</button>
+            <button id="btnAgain" class="btn ghost">Mulai dari awal</button>
+            <p id="driveMsg" class="muted" role="status"></p>
+            <div id="qrBox" class="qr-box" hidden>
+              <canvas id="qrCanvas" width="280" height="280" role="img" aria-label="QR code menuju folder foto di Google Drive"></canvas>
+              <p class="qr-title">Scan dengan kamera HP untuk membuka foto</p>
+              <p class="muted"><a id="qrLink" href="#" target="_blank" rel="noopener">Buka folder di Drive</a></p>
+              <button id="btnQRDl" type="button" class="btn ghost btn-sm">Unduh QR</button>
+              <p class="muted qr-note">Folder ini dibagikan lewat link: siapa pun yang punya QR/link ini bisa melihat fotonya.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot" id="footNote">Foto diproses di browser kamu.</footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/templates.js"></script>
+  <script src="js/camera.js"></script>
+  <script src="js/styles.js"></script>
+  <script src="js/strip.js"></script>
+  <script src="js/editor.js"></script>
+  <script src="js/qr.js"></script>
+  <script src="js/drive.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
